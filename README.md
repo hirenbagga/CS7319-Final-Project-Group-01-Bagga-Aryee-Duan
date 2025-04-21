@@ -313,11 +313,7 @@ the available endpoints, and how to use them effectively.
 ###### -----------------BACKEND:--------------------
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-repo/hask-task.git
-    ```
-    ---or---
-    ```bash
-    git clone https://github.com/your-repo/hask-task.git
+    git clone https://github.com/hirenbagga/CS7319-Final-Project-Group-01-Bagga-Aryee-Duan.git
     ```
 
 2. Navigate to the project directory:
@@ -473,7 +469,7 @@ Errors are returned in a standard format:
 
 1. Clone the frontend repository:
     ```bash
-    git clone https://github.com/your-repo/hask-task.git
+    git clone https://github.com/hirenbagga/CS7319-Final-Project-Group-01-Bagga-Aryee-Duan.git
     ```
 2. Navigate to the frontend directory: (Run the ReactJS frontend application to interact with the API.)
 
