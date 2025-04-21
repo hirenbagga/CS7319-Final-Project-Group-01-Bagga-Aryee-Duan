@@ -344,10 +344,7 @@ the available endpoints, and how to use them effectively.
 The application uses Kafka for event-driven architecture. A Kafka consumer listens for events on the `task-events`
 topic. When a task is marked as completed, an event is produced and consumed by the API.
 
-### Events:
-
-- **TASK_COMPLETED:** When a task is marked as completed, the event is sent, and notifications are triggered.
-
+    - NOTE: (Deployed in MacOS - macbook-air). However, this steps might be similar to Windows OS Platform
     - Download and unzip Kafka from the [Apache Kafka website](https://kafka.apache.org/quickstart).
     - Rename the unzip folder to `kafka_server`.
     - Change directory(cd) into the `kafka_server` folder.
@@ -386,6 +383,11 @@ topic. When a task is marked as completed, an event is produced and consumed by 
 
 ## API Endpoints
 
+### Events:
+
+- **TASK_COMPLETED:** When a task is marked as completed, the event is sent, and notifications are triggered.
+- **EVENT_DUE:** When an event is due, notifications are triggered.
+- 
 ### Create Task
 
 - Complete Usage & Description of Endpoint (Swagger UI): [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
