@@ -35,6 +35,7 @@ their
 status through notifications.
 > [API Endpoints Documentation Link] (http://localhost:8080/swagger-ui/index.html)<br>
 > [CHECK IF SERVER IS UP OR DOWN] (http://localhost:8181/actuator/health)
+> or (http://localhost:8080/actuator/health)
 
 ## Modular Design for Scalability:
 
@@ -313,17 +314,17 @@ the available endpoints, and how to use them effectively.
 ###### -----------------BACKEND:--------------------
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-repo/hask-task.git
-    ```
-    ---or---
-    ```bash
-    git clone https://github.com/your-repo/hask-task.git
+    git clone https://github.com/hirenbagga/CS7319-Final-Project-Group-01-Bagga-Aryee-Duan.git
     ```
 
-2. Navigate to the project directory:
+2. Navigate to the project directory for the backend:
 
    ```bash
-   cd hask-task
+   cd Selected
+   ```
+   --- or ---
+   ```bash
+   cd Unselected
    ```
 2.1. Create a PostgreSQL database:
 
@@ -338,15 +339,12 @@ the available endpoints, and how to use them effectively.
        username: postgres
        password: postgres1
    ```
-3. Kafka Configuration:
+4. Kafka Configuration:
 
 The application uses Kafka for event-driven architecture. A Kafka consumer listens for events on the `task-events`
 topic. When a task is marked as completed, an event is produced and consumed by the API.
 
-### Events:
-
-- **TASK_COMPLETED:** When a task is marked as completed, the event is sent, and notifications are triggered.
-
+    - NOTE: (Deployed in MacOS - macbook-air). However, this steps might be similar to Windows OS Platform
     - Download and unzip Kafka from the [Apache Kafka website](https://kafka.apache.org/quickstart).
     - Rename the unzip folder to `kafka_server`.
     - Change directory(cd) into the `kafka_server` folder.
@@ -385,6 +383,11 @@ topic. When a task is marked as completed, an event is produced and consumed by 
 
 ## API Endpoints
 
+### Events:
+
+- **TASK_COMPLETED:** When a task is marked as completed, the event is sent, and notifications are triggered.
+- **EVENT_DUE:** When an event is due, notifications are triggered.
+- 
 ### Create Task
 
 - Complete Usage & Description of Endpoint (Swagger UI): [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
@@ -473,12 +476,12 @@ Errors are returned in a standard format:
 
 1. Clone the frontend repository:
     ```bash
-    git clone https://github.com/your-repo/hask-task.git
+    git clone https://github.com/hirenbagga/CS7319-Final-Project-Group-01-Bagga-Aryee-Duan.git
     ```
 2. Navigate to the frontend directory: (Run the ReactJS frontend application to interact with the API.)
 
    ```bash
-   cd hask-task-frontend
+   cd Frontend
    ```
 3. Install dependencies:
 
