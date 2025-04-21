@@ -59,7 +59,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getByEmail(userId));
     }
 
-    @PutMapping("/change_password")
+    @PutMapping("/reset_password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
         userService.changeUserPassword(request);
         return ResponseEntity.noContent().build();

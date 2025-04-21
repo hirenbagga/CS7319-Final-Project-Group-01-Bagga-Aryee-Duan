@@ -54,8 +54,6 @@ public class NotificationService {
 
         // Send email
         emailService.sendMail(toEmail, subject, body);
-        // Trigger Kafka event for event creation
-        // accountProducer.sendEventCreatedEvent(user.getId(), user.getEmail());
 
         System.out.println("📩 [Verification Email Sent] to: " + toEmail);
     }

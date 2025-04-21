@@ -1,0 +1,14 @@
+# Spring Application Properties
+spring:
+  application:
+    name: Hask Task
+
+  # Spring Profiles
+  profiles:
+    active: clientServer # active: Client-Server Architecture
+    # active: eventBased  # active: Event-Based Architecture
+
+
+
+
+

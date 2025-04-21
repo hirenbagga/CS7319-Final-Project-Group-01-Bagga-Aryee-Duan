@@ -30,13 +30,13 @@ public class EventService {
         return eventRepository.findByEndDateTimeBetween(now, windowEnd);
     }
 
-    public Event createEvent(Event event) {
+    public void createEvent(Event event) {
         var user = userRepository.findById(event.getUser().getId())
                 .orElseThrow(() -> new GeneralException("User", "User not found"));
 
         // Set the fetched User in the Event object
         event.setUser(user);
-        return eventRepository.save(event);
+        eventRepository.save(event);
     }
 
     public List<Event> getEventsByUserId(Long userId) {

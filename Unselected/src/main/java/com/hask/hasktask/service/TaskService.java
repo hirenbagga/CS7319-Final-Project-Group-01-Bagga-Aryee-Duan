@@ -27,14 +27,14 @@ public class TaskService {
         return taskRepository.findByDueDateBetween(now, windowEnd); // Query based on LocalDateTime
     }
 
-    public Task create(Task task) {
+    public void create(Task task) {
         var user = userRepository.findById(task.getUser().getId())
                 .orElseThrow(() -> new GeneralException("User", "User not found"));
 
         // Set the fetched User in the Event object
         task.setUser(user);
 
-        return taskRepository.save(task);
+        taskRepository.save(task);
     }
 
     public List<Task> getTasksByUserId(Long userId) {

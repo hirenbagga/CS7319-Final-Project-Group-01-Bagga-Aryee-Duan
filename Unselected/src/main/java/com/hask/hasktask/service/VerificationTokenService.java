@@ -26,10 +26,11 @@ public class VerificationTokenService {
 
     private final JWTService jwtService;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
     private final VerificationTokenRepository verificationTokenRepository;
     private static final int OTP_LENGTH = 6;  // OTP length can be changed
 
-    public void saveVerification(User user, String msg, String alt, Date expiry) {
+    public void create(User user, String msg, String alt, Date expiry) {
         var confirmationToken = VerificationToken.builder()
                 .user(user)
                 .token(msg)
@@ -52,23 +53,46 @@ public class VerificationTokenService {
         return verificationTokenRepository.findByOtp(otp);
     }
 
-    public Map<String, Object> saveEmailVerification(User user) {
-
-        // Generate OTP and email verification token
+    public void sendVerificationEmail(User user) {
         String otp = generateOTP();
+        String token = saveEmailConfirmation(user, otp);
+
+        notificationService.sendVerifyAccountNotification(
+                token,
+                otp,
+                user.getEmail()
+        );
+    }
+
+    public Map<String, Object> sendForgotPasswordOTP(User user) {
+        String otp = generateOTP();
+        String token = saveEmailConfirmation(user, otp);
+
+        notificationService.sendVerifyAccountNotification(
+                token,
+                otp,
+                user.getEmail()
+        );
+        // Return a map with token, OTP, and email
+        return Map.of(
+                "otp", otp,
+                "token", token
+        );
+    }
+
+    private String saveEmailConfirmation(User user, String otp) {
+
+        // Generate email confirmation token
         Map<String, Object> tk = jwtService.generateEmailVerifyToken(user);
 
         // Get token and expiration date from Map
         String token = tk.get("emailConfirmationToken").toString();
         Date tokenExpiration = (Date) tk.get("emailConfirmationExpiration");
 
-        saveVerification(user, token, otp, tokenExpiration);
 
-        // Return a map with token, OTP, and email
-        return Map.of(
-                "otp", otp,
-                "token", token
-        );
+        create(user, token, otp, tokenExpiration);
+
+        return token;
     }
 
     public void otpMatches(String otp) {

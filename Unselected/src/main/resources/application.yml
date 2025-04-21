@@ -5,7 +5,8 @@ spring:
 
   # Spring Profiles
   profiles:
-    active: dev
+    active: clientServer # active: Client-Server Architecture
+    # active: eventBased  # active: Event-Based Architecture
 
 
 

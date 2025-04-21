@@ -1,6 +1,5 @@
 package com.hask.hasktask.service;
 
-import com.hask.hasktask.event.EventProducer;
 import com.hask.hasktask.model.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,12 +11,12 @@ import java.util.List;
 public class EventDueReminder {
 
     private final EventService eventService;
-    private final EventProducer eventProducer;
+    private final NotificationService notificationService;
 
     @Autowired
-    public EventDueReminder(EventService eventService, EventProducer eventProducer) {
+    public EventDueReminder(EventService eventService, NotificationService notificationService) {
         this.eventService = eventService;
-        this.eventProducer = eventProducer;
+        this.notificationService = notificationService;
     }
 
     // Background job runs every minute to check reminders
@@ -29,10 +28,14 @@ public class EventDueReminder {
         // Use asynchronous processing to handle each event concurrently
         dueEvents.parallelStream().forEach(event -> {
             try {
-                System.out.println("Success-Steve: " + event);
+                System.out.println("Success-Anthony-Steve: " + event);
                 // Trigger Kafka notification (asynchronously)
                 if (!event.isReminderSent()) {
-                    eventProducer.sendEventDueEvent(event.getEventId(), event.getEventName());
+                    notificationService.sendEventNotification(
+                            event.getUser().getEmail(),
+                            "Event " + event.getEventName() + " " + "due",
+                            event.getEndDateTime()
+                    );
                     event.setReminderSent(true); // Mark reminder as sent
                 }
             } catch (Exception e) {

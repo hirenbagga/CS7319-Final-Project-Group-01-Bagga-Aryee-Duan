@@ -1,12 +1,9 @@
 package com.hask.hasktask.controller;
 
-import com.hask.hasktask.event.AccountProducer;
 import com.hask.hasktask.model.AuthenticateRequest;
 import com.hask.hasktask.model.JWTResponse;
 import com.hask.hasktask.model.RegisterRequest;
-import com.hask.hasktask.model.VerificationDetails;
 import com.hask.hasktask.service.AuthenticationService;
-//import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +24,6 @@ import java.io.IOException;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-    private final AccountProducer accountProducer;
 
     private int counter;
 
@@ -40,10 +36,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest, HttpServletRequest httpRequest) {
 
-        VerificationDetails details = authenticationService.register(registerRequest, httpRequest);
-
-        // Trigger Kafka event for account creation
-        accountProducer.sendAccountCreatedEvent(details.token(), details.otp(), details.toEmail());
+        authenticationService.register(registerRequest, httpRequest);
 
         return ResponseEntity.ok().build();
     }
@@ -75,11 +68,9 @@ public class AuthenticationController {
     /*
      * /api/v1/auth/resend/confirm_email?param=admin@gmail.com */
     @PostMapping("/resend/confirm_email")
-    public ResponseEntity<String> resendConfirmMail(@RequestParam String email) {
-        VerificationDetails details = authenticationService.resendConfirmationMail(email);
+    public ResponseEntity<?> resendConfirmMail(@RequestParam String email) {
+        authenticationService.resendConfirmationMail(email);
 
-        // Trigger Kafka event for account verification Email
-        accountProducer.sendVerifyAccountEvent(details.token(), details.otp(), details.toEmail());
         return ResponseEntity.ok().build();
     }
 
@@ -119,10 +110,8 @@ public class AuthenticationController {
     @PostMapping("/forgot_password")
     public ResponseEntity<?> forgotPassword(@RequestParam String email) {
 
-        VerificationDetails details = authenticationService.forgotPassword(email);
+        authenticationService.forgotPassword(email);
 
-        // Trigger Kafka event for forgot password creation
-        accountProducer.sendForgotPasswordEvent(details.token(), details.otp(), details.toEmail());
         return ResponseEntity.ok().build();
     }
 }

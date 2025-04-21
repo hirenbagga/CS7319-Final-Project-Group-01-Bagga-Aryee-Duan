@@ -34,16 +34,16 @@ public class AuthenticationService {
     /**
      * Register/SignUp a New API Client/User
      */
-    public VerificationDetails register(RegisterRequest req,
-                                        HttpServletRequest httpRequest) {
+    public void register(RegisterRequest req,
+                         HttpServletRequest httpRequest) {
 
         String userEmail = req.getEmail();
 
-        if (userExists(userEmail) || !verificationTokenService.isValidEmail(userEmail)) {
+        if (userExists(userEmail)) {
             throw new GeneralException(userEmail, "User with already exist");
         }
 
-        // 1️⃣ Create and save the user
+        // Create a New User
         var user = User.builder()
                 .firstName(req.getFirstName())
                 .lastName(req.getLastName())
@@ -51,26 +51,22 @@ public class AuthenticationService {
                 .phone(req.getPhone())
                 .password(passwordEncoder.encode(req.getPassword()))
                 // By default, set Role to USER, if not provided
+                // .role(Role.USER)
                 .role(Role.valueOf(req.getRole().toUpperCase()))
                 .build();
 
         userRepository.save(user);
 
-        // 2️⃣ Generate a verification OTP & token
-        var verify = verificationTokenService.saveEmailVerification(user);
+        /*
+         * Send OTP & EMAIL CONFIRMATION */
+        verificationTokenService.sendVerificationEmail(user);
 
-        return new VerificationDetails(
-                verify.get("token").toString(),
-                verify.get("otp").toString(),
-                userEmail,
-                "ACC_CREATED"
-        );
     }
 
     /**
      * Resend Confirm Registered/SignUp Email
      */
-    public VerificationDetails resendConfirmationMail(String email) {
+    public void resendConfirmationMail(String email) {
 
         // 1️⃣ Check if user exists
         var user = findUserByEmail(email);
@@ -81,14 +77,7 @@ public class AuthenticationService {
         }
 
         // 2️⃣ Generate a verification OTP & token
-        var verify = verificationTokenService.saveEmailVerification(user);
-
-        return new VerificationDetails(
-                verify.get("token").toString(),
-                verify.get("otp").toString(),
-                email,
-                "ACC_RESEND"
-        );
+        verificationTokenService.sendVerificationEmail(user);
     }
 
     /**
@@ -235,7 +224,7 @@ public class AuthenticationService {
         return getJWTResponse(email, otp);
     }
 
-    public VerificationDetails forgotPassword(String email) {
+    public void forgotPassword(String email) {
         var user = findUserByEmail(email);
         if (!user.isEnabled()) {
             throw new GeneralException(email, "User email invalid");
@@ -243,7 +232,7 @@ public class AuthenticationService {
 
 
         // 2️⃣ Generate a verification OTP & token
-        var verify = verificationTokenService.saveEmailVerification(user);
+        var verify = verificationTokenService.sendForgotPasswordOTP(user);
 
         String otp = verify.get("otp").toString();
 
@@ -251,13 +240,6 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(otp));
         user.setUpdatedAt(LocalDateTime.now()); // Last Updated Time
         userRepository.save(user); // save the new password
-
-        return new VerificationDetails(
-                verify.get("token").toString(),
-                otp,
-                email,
-                "ACC_FORGOT"
-        );
     }
 
     private User findUserByEmail(String email) {
