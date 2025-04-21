@@ -35,6 +35,7 @@ their
 status through notifications.
 > [API Endpoints Documentation Link] (http://localhost:8080/swagger-ui/index.html)<br>
 > [CHECK IF SERVER IS UP OR DOWN] (http://localhost:8181/actuator/health)
+> or (http://localhost:8080/actuator/health)
 
 ## Modular Design for Scalability:
 
