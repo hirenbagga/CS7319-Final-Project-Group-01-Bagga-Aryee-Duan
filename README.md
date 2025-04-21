@@ -317,10 +317,14 @@ the available endpoints, and how to use them effectively.
     git clone https://github.com/hirenbagga/CS7319-Final-Project-Group-01-Bagga-Aryee-Duan.git
     ```
 
-2. Navigate to the project directory:
+2. Navigate to the project directory for the backend:
 
    ```bash
-   cd hask-task
+   cd Selected
+   ```
+   --- or ---
+   ```bash
+   cd Unselected
    ```
 2.1. Create a PostgreSQL database:
 
@@ -335,7 +339,7 @@ the available endpoints, and how to use them effectively.
        username: postgres
        password: postgres1
    ```
-3. Kafka Configuration:
+4. Kafka Configuration:
 
 The application uses Kafka for event-driven architecture. A Kafka consumer listens for events on the `task-events`
 topic. When a task is marked as completed, an event is produced and consumed by the API.
@@ -475,7 +479,7 @@ Errors are returned in a standard format:
 2. Navigate to the frontend directory: (Run the ReactJS frontend application to interact with the API.)
 
    ```bash
-   cd hask-task-frontend
+   cd Frontend
    ```
 3. Install dependencies:
 
